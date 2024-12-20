@@ -111,7 +111,7 @@ from customer c
 inner join customer_purchases cp
 on c.customer_id = cp.customer_id
 group by c.customer_id
-having total >= 2000
+having total > 2000
 order by c.customer_last_name , c.customer_first_name ;
 
 
