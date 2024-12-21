@@ -44,9 +44,11 @@ Additionally, include a date table.
 There are several tools online you can use, I'd recommend [Draw.io](https://www.drawio.com/) or [LucidChart](https://www.lucidchart.com/pages/).
 
 **HINT:** You do not need to create any data for this prompt. This is a conceptual model only. 
+![alt text](images/pic1.PNG)
 <img src="./images/pic1.png" width="500">
 #### Prompt 2
 We want to create employee shifts, splitting up the day into morning and evening. Add this to the ERD.
+![alt text](images/pic2.PNG)
 <img src="./images/pic1.png" width="500">
 #### Prompt 3
 The store wants to keep customer addresses. Propose two architectures for the CUSTOMER_ADDRESS table, one that will retain changes, and another that will overwrite. Which is type 1, which is type 2? 
@@ -55,6 +57,9 @@ The store wants to keep customer addresses. Propose two architectures for the CU
 
 ```
 Your answer...
+The architecture that overwrites the customer_address with new data is SCD TYPE1. In this, when a change is detected, the new data overwrites the old data. Only the current data is preserved and not the older one.
+
+The architecture that retains the new customer_address in a seperate column along with older address is SCD TYPE2. In this, both new and old information is kept track irrespective of the change.
 ```
 
 ***
