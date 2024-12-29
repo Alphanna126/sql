@@ -254,22 +254,30 @@ When you have all of these components, you can run the update statement. */
 ALTER TABLE product_units
 ADD current_quantity INT;
 
-UPDATE product_units 
-SET current_quantity = COALESCE(
-    (
-        SELECT vi.quantity
-        FROM vendor_inventory vi
-        WHERE vi.product_id = product_units.product_id
-        ORDER BY vi.market_date DESC
-        LIMIT 1
-    ), 0)
-WHERE product_units.product_id IN (
-    SELECT DISTINCT product_id
-    FROM vendor_inventory
-);
 
-select *,coalesce(current_quantity,0) from product_units;
+drop  table base;
+create temp table if not exists base as
+select product_id, product_name, coalesce(quantity,0) as final_quantity
+		from 
 
+				(select p. product_id
+				, p.product_name
+				, first.quantity from product p
+				left join
+				(		select * from
+								(SELECT *,row_number() over (partition by product_id order by market_date desc) as r_n
+								FROM vendor_inventory 
+								ORDER BY product_id, market_date DESC)
+				where r_n = 1)as first
+		on p.product_id = first.product_id) as second
+		
+select * from base;
 
+UPDATE product_units
+set current_quantity =
+( select final_quantity from base b
+where product_units.product_id = b.product_id)
+
+select * from product_units;
 
 
